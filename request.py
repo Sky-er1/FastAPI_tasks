@@ -2,14 +2,13 @@ import asyncio
 import aiohttp
 from aiohttp import ClientSession
 
-
 URL = 'http://127.0.0.1:8000/task'
 PARAMS = [
     {"x": 1, "y": 2},
     {"x": 3, "y": 4},
     {"x": 5, "y": 1},
-    {"x": -1, "y": 2},
-    {"x": 0, "y": 3}
+    {"x": 2, "y": 2},
+    {"x": 3, "y": 3}
 ]
 
 
@@ -29,10 +28,26 @@ async def fetch_data(session: ClientSession, url: str, x: int, y: int):
 
 async def main():
     async with aiohttp.ClientSession() as session:
-        requests = [fetch_data(session, URL, **params) for params in PARAMS]
+        requests = [asyncio.create_task(fetch_data(session, URL, **params)) for
+                    params in PARAMS]
+
+        print("Задача 1. Вывод всех запросов в порядке запуска:\n")
         responses = await asyncio.gather(*requests)
         for i, response in enumerate(responses):
             print(f"Запрос {i + 1}: Ответ = {response}")
+        print("\n")
+        print("Задача 2. Вывод второго по времени запроса:")
+        finished, unfinished = await asyncio.wait(requests, return_when=asyncio.FIRST_COMPLETED)
+
+        if len(finished) >= 2:
+            second_done = list(finished)[1]
+            print(f"Второй запрос: {await second_done}")
+
+            for task in unfinished:
+                task.cancel()
+
+        else:
+            print("Было выполнено меньш двух запросов")
 
 
 asyncio.run(main())
