@@ -18,7 +18,7 @@ async def task2():
                 completed_requests.append(result)
                 if len(completed_requests) == 2:
                     print(f"Второй по времени выполнения запрос: {result}")
-                    [task.cancel() for task in requests]
+                    [task.cancel() for task in requests if not task.done()]
                     return
 
 
