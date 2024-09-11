@@ -37,17 +37,14 @@ async def main():
             print(f"Запрос {i + 1}: Ответ = {response}")
         print("\n")
         print("Задача 2. Вывод второго по времени запроса:")
-        finished, unfinished = await asyncio.wait(requests, return_when=asyncio.FIRST_COMPLETED)
 
-        if len(finished) >= 2:
-            second_done = list(finished)[1]
-            print(f"Второй запрос: {await second_done}")
-
-            for task in unfinished:
-                task.cancel()
-
-        else:
-            print("Было выполнено меньш двух запросов")
-
+        count = 0
+        while True:
+            for future in asyncio.as_completed(requests):
+                result = await future
+                count += 1
+                if count == 2:
+                    print(f"Второй по времени запрос: {result}")
+                    return
 
 asyncio.run(main())
