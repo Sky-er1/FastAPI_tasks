@@ -20,6 +20,16 @@ class XlesZeroException(TaskException):
         super().__init__(detail=detail)
 
 
+class ZeroDivisionException(TaskException):
+    def __init__(self, x: int, y: int):
+        detail = {
+            "Error": "ZeroDivisionException",
+            "ErrorMessage": "y должен быть больше нуля",
+            "RequestData": f"x = {x}, y = {y}"
+        }
+        super().__init__(detail=detail)
+
+
 async def validation_exception_handler(request: Request,
                                        exc: RequestValidationError):
     x = request.query_params.get('x', '?')

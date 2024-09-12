@@ -1,7 +1,7 @@
 import asyncio
 import random
 from fastapi import APIRouter
-from exceptions import XlesZeroException
+from exceptions import XlesZeroException, ZeroDivisionException
 
 router = APIRouter(
     prefix="/task",
@@ -13,8 +13,8 @@ router = APIRouter(
 async def get_two_numbers(x: int, y: int):
     if x <= 0:
         raise XlesZeroException(x, y)
+    if y == 0:
+        raise ZeroDivisionException(x, y)
     await asyncio.sleep(random.uniform(0, 3))
     result = (x / y) * random.randint(-10, 10)
     return {"x": x, "y": y, "result": result}
-
-
