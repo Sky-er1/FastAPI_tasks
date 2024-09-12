@@ -16,7 +16,7 @@ async def task3():
             for future in asyncio.as_completed(requests):
                 result = await future
                 completed_requests.append(result)
-                if len(completed_requests) == 3 and "Error" in result:
+                if len(completed_requests) == 3 and result['result'] < 0:
                     print(f"Первый и второй запросы: {completed_requests[0]}, {completed_requests[1]}")
                     [task.cancel() for task in requests if not task.done()]
                     return
