@@ -50,6 +50,8 @@
 - все ошибки должны быть обработаны
 
 
+
+
 ### Подготовка
 Установить зависимости
 ```
@@ -61,3 +63,8 @@ pip install -r requirements.txt
 uvicorn main:app --reload
 ```
 
+### Используемые технологии 
+
+- aiohttp
+- fastapi
+- asyncio
